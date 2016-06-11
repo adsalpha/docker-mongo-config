@@ -6,13 +6,16 @@ It's built for remote access to Mongo from a client computer.
 
 # Prerequisites and installation
 
-First of all, SSH to your instance and execute: `git clone https://github.com/adsalpha/docker-mongo-config/ && cd docker-mongo-config`.
-
-Modify the downloaded config file (`mongod.conf`) according to your needs, add bindIp's or whatever. Build your image with `docker build -t <imgname> .`. Then, run the container: `docker run --name mongo -p 27017:27017 -it <imgname>`. Exit from it using the escape sequence `Ctrl-P Ctrl-Q`
+1. SSH to your instance and execute: `git clone https://github.com/adsalpha/docker-mongo-config/ && cd docker-mongo-config`.
+2. Edit the mongod.conf according to your needs. You can take mine, which opens access to the database from remote computers.
+3. Build the image using `docker build -t <imagename> .`
+4. Create a running container with `docker run -p 27017:27017 --name mongo -it <imagename>`
 
 ##### Why not pull from Docker Hub?
-Your config files may be different from mine. You could've pulled the image, added your config to /var/lib/volumes/.../_data, but it's not that straighforward. However, if you think your image could be useful to someone, you're welcome to commit it to Docker Hub.
+Your config file may be different from mine. You could've pulled the image, added your config to /var/lib/volumes/.../_data, but it's not that straighforward. However, if you think your image could be useful to someone, you're welcome to commit it.
 
 # Accessing the database
 
-Access your mongo shell remotely thru `mongo <hostip>:27017` from a client computer. To get a bash shell into the container, execute `docker exec -it mongo bash`.
+Access your Mongo shell remotely thru `mongo <hostip>:27017` from a client computer or use a programming language driver. To get a bash shell into the container, execute `docker exec -it mongo bash`. To view the server logs, do `docker attach mongo`.
+
+Since your server is accessible from the outside, it'd also be a good idea to configure your server firewall to allow access from certain IP(s). I use UFW on Ubuntu, opening port 27017 for my VPN and 22 for my Mac and VPN.
